@@ -2,12 +2,24 @@ import numpy as np
 from PIL import Image
 
 # Function to load and preprocess the image
+#Load the image from a file and return it as a NumPy array. You will need to use the Pillow library for this task. You can reuse the code from Lab 2.
 def load_image(image_path):
-    raise NotImplementedError('You need to implement this function')
+    picture = Image.open(image_path)
+    picture_array = np.array(picture)
+    return picture_array
 
 # Function to perform SVD on a single channel of the image matrix
 def compress_channel_svd(channel_matrix, rank):
-    raise NotImplementedError('You need to implement this function')
+    u,s,vt=np.linalg.svd(channel_matrix,full_matrices=False)
+
+
+    u_reduced = u[:, : rank]
+    s_reduced = np.diag(s[:rank])
+    vt_reduced = vt[:rank, :]
+
+    #Just like the formula in class. Multiply u, sum s, and vt
+    compressed_array = np.dot(u_reduced, np.dot(s_reduced, vt_reduced))
+    return compressed_array
 
 # Function to perform SVD for image compression
 def image_compression_svd(image_np, rank):
